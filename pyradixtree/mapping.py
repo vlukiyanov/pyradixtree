@@ -1,4 +1,4 @@
-from typing import Iterator, List, MutableMapping, TypeVar
+from typing import Iterator, List, MutableMapping, Tuple, TypeVar
 
 from pyradixtree.node import Node, Sentinel
 from pyradixtree.operations import delete, find, insert, length
@@ -23,11 +23,12 @@ class RadixTreeMap(MutableMapping[str, VT]):
         return length(self._root)
 
     def __iter__(self) -> Iterator[str]:
-        acc: List[Node[VT]] = [self._root]
+        acc: List[Tuple[Node[VT]]] = [(self._root,)]
         while acc:
             item = acc.pop()
-            acc.extend(item for item in item.children)
-            if item.value is not Sentinel.MISSING:
+            for child in item[-1].children:
+                acc.append(item + (child,))  # type: ignore
+            if item[-1].value is not Sentinel.MISSING:
                 yield item.key  # type: ignore
 
     def __repr__(self):

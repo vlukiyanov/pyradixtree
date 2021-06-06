@@ -14,4 +14,4 @@ This is a pure Python toy implementation of a radix tree, including a `MutableMa
   3
 ```
 
-Note that for simplicity the key type is hardcoded to `str`.
+Note that for simplicity the key type is hardcoded to `str`; another limitation is keys must have length greater than 0, so `""` is not allowed as a key.

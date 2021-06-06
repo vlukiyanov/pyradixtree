@@ -106,6 +106,9 @@ def insert(key: str, value: T, tree: Node[T], update: bool = True) -> None:
     :param tree: given radix tree
     :param update: whether to update the value if found
     """
+    if len(key) == 0:
+        # TODO this is a bit of a limitation
+        raise ValueError("Cannot insert empty strings")
     path: List[Node[T]] = []
     acc: List[Tuple[Node[T], str]] = [(tree, key)]
     while acc:

@@ -40,12 +40,23 @@ def _insert_root(key: str, value: T, path: List[Node[T]]) -> None:
     :param path: path to the insertion
     """
     current_root = path[-1]
-    new_node = Node(
-        key=key,
-        value=value,
-        children=[],
-    )
-    current_root.children.append(new_node)
+    if not current_root.is_leaf:
+        new_node = Node(
+            key=key,
+            value=value,
+            children=[],
+        )
+        current_root.children.append(new_node)
+    else:
+        new_current_root = replace(current_root, key="", children=[])
+        new_node = Node(
+            key=key,
+            value=value,
+            children=[],
+        )
+        current_root.value = Sentinel.MISSING
+        current_root.children.append(new_node)
+        current_root.children.append(new_current_root)
 
 
 def _insert_root_split(key: str, common: str, value: T, path: List[Node[T]]) -> None:

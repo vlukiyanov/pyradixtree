@@ -70,7 +70,7 @@ def test_insert_root_hand_written_example_2():
     with pytest.raises(KeyError):
         _ = find("slower", tree)[0]
     _insert_root("er", 4, path)
-    assert len(tree.children[1].children) == 1
+    assert len(tree.children[1].children) == 2
     assert tree.children[1].children[0].key == "er"
     assert find("slower", tree)[0] == 4
 

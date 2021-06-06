@@ -59,6 +59,10 @@ def test_find_hand_written_examples():
     assert len(find("abba", tree)[1]) == 3
     assert len(find("abc", tree)[1]) == 4
     assert len(find("abcd", tree)[1]) == 4
+    # handling of return_path
+    assert len(find("abba", tree, return_path=False)[1]) == 0
+    assert len(find("abc", tree, return_path=False)[1]) == 0
+    assert len(find("abcd", tree, return_path=False)[1]) == 0
 
 
 def test_find_split_example():

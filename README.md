@@ -2,7 +2,7 @@
 
 This is a pure Python toy implementation of a radix tree, including a `MutableMapping` interface which can be used as follows:
 
-```jupyterpython
+```python
 >> from pyradixtree.mapping import RadixTreeMap
 >> m = RadixTreeMap()
 >> m['a'] = 1

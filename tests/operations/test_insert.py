@@ -2,8 +2,12 @@ import pytest
 
 from pyradixtree.node import Node, Sentinel
 from pyradixtree.operations import find
-from pyradixtree.operations._insert import (_compare_insert, _insert_root,
-                                            _insert_root_split, insert)
+from pyradixtree.operations._insert import (
+    _compare_insert,
+    _insert_root,
+    _insert_root_split,
+    insert,
+)
 
 
 def test_compare_insert():

@@ -4,12 +4,11 @@ from pyradixtree.node import Node, Sentinel
 from pyradixtree.operations import delete, find, insert, length
 
 VT = TypeVar("VT")
-VT_co = TypeVar("VT_co", covariant=True)
 
 
 class RadixTreeMap(MutableMapping[str, VT]):
     def __init__(self):
-        self._root = Node(key=None, value=Sentinel.MISSING, children=[])
+        self._root: Node[VT] = Node(key=None, value=Sentinel.MISSING, children=[])
 
     def __setitem__(self, k: str, v: VT) -> None:
         insert(k, v, self._root)
@@ -17,7 +16,7 @@ class RadixTreeMap(MutableMapping[str, VT]):
     def __delitem__(self, v: str) -> None:
         delete(v, self._root)
 
-    def __getitem__(self, k: str) -> VT_co:
+    def __getitem__(self, k: str) -> VT:
         return find(k, self._root, return_path=False)[0]
 
     def __len__(self) -> int:
@@ -29,9 +28,7 @@ class RadixTreeMap(MutableMapping[str, VT]):
             item = acc.pop()
             acc.extend(item for item in item.children)
             if item.value is not Sentinel.MISSING:
-                yield item.key
+                yield item.key  # type: ignore
 
     def __repr__(self):
         return repr(dict(self.items()))
-
-print(1)

@@ -27,4 +27,4 @@ class Node(Generic[T]):
         if not self.is_leaf:
             raise KeyError()
         else:
-            return self.value
+            return self.value  # type: ignore

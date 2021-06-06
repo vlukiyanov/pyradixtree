@@ -32,7 +32,7 @@ def delete(key: str, tree: Node[T]) -> Optional[str]:
                 if len(path) >= 2 and len(current_root.children) == 1:
                     current_child = current_root.children[0]
                     current_root.children = current_child.children
-                    current_root.key = current_root.key + current_child.key
+                    current_root.key = current_root.key + current_child.key  # type: ignore
                     current_root.value = current_child.value
                 return key
             else:

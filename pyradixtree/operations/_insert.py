@@ -9,6 +9,10 @@ T = TypeVar("T")
 
 
 def _compare_insert(search: str, prefix: str) -> Tuple[str, str, str]:
+    """
+    Helper function for insert used to find common prefix and dangling
+    end.
+    """
     common: List[str] = []
     acc_left: List[str] = []
     acc_right: List[str] = []
@@ -81,7 +85,16 @@ def _insert_root_split(key: str, common: str, value: T, path: List[Node[T]]) -> 
         raise ValueError("Passed incompatible path")
 
 
-def insert(key: str, value: T, tree: Node[T]) -> None:
+def insert(key: str, value: T, tree: Node[T], update: bool = True) -> None:
+    """
+    Insert the given key and value pair into the tree, if the value already exist then
+    update it if update is set to True.
+
+    :param key: given key to insert or modify
+    :param value: given value
+    :param tree: given radix tree
+    :param update: whether to update the value if found
+    """
     path: List[Node[T]] = []
     acc: List[Tuple[Node[T], str]] = [(tree, key)]
     while acc:
@@ -101,7 +114,9 @@ def insert(key: str, value: T, tree: Node[T]) -> None:
                     continue
             elif comparison == "" and item.value != Sentinel.MISSING:
                 # found the item, modify it
-                item.value = value
+                if update:
+                    item.value = value
+                break
             elif comparison is not None:
                 # found a prefix, focus search
                 path.append(item)

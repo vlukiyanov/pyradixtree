@@ -9,9 +9,9 @@ This is a pure Python toy implementation of a radix tree, including a `MutableMa
 >> m['abc'] = 3
 >> del m['a']
 >> len(m)
-1
+  1
 >> m['abc']
-3
+  3
 ```
 
 Note that for simplicity the key type is hardcoded to `str`.

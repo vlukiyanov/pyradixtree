@@ -158,7 +158,7 @@ def insert(key: str, value: T, tree: Node[T], update: bool = True) -> None:
             elif comparison is not None:
                 # found a prefix, focus search
                 path.append(item)
-                path_key += item.key
+                path_key += item.key  # type: ignore
                 acc = [(node, comparison) for node in item.children]
             else:
                 # above is to satisfy mypy

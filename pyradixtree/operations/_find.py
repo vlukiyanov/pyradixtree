@@ -23,7 +23,7 @@ def _compare_find(search: str, prefix: Optional[str]) -> Optional[str]:
         return None
 
 
-def find(key: str, tree: Node[T]) -> Tuple[T, List[Node[T]]]:
+def find(key: str, tree: Node[T]) -> T:
     """
     Find and return the value
 

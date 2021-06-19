@@ -35,11 +35,5 @@ def delete(key: str, tree: Node[T]) -> Optional[str]:
                     current_root.value = current_child.value
                 return key
             else:
-                # found a prefix, focus search
-                if item.key == "":
-                    acc.extend(
-                        (node, comparison, path + [item]) for node in item.children
-                    )
-                else:
-                    acc = [(node, comparison, path + [item]) for node in item.children]
+                acc.extend((node, comparison, path + [item]) for node in item.children)
     return None

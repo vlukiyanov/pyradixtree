@@ -45,10 +45,6 @@ def find(key: str, tree: Node[T]) -> T:
                 # found the exact item, return it
                 return item.get()
             else:
-                # found a prefix, focus search
-                if item.key == "":
-                    acc.extend((node, comparison) for node in item.children)
-                else:
-                    acc = [(node, comparison) for node in item.children]
+                acc.extend((node, comparison) for node in item.children)
     # if we exhaust search without finding a prefix or the exact item, we end up here
     raise KeyError()

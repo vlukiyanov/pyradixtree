@@ -32,5 +32,5 @@ def modify(key: str, value: T, tree: Node[T]) -> Optional[str]:
                 if item.key == "":
                     acc.extend((node, comparison) for node in item.children)
                 else:
-                    acc = [(node, comparison) for node in item.children]
+                    acc.extend((node, comparison) for node in item.children)
     return None

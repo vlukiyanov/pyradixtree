@@ -1,5 +1,5 @@
 import pytest
-from hypothesis import given, settings
+from hypothesis import given, reproduce_failure, settings
 from hypothesis import strategies as st
 
 from pyradixtree.node import Node, Sentinel
@@ -338,6 +338,25 @@ def test_insert_hand_written_example_7():
             assert inserted_index == find(inserted_item, tree)
     for index, item in enumerate(items):
         assert index == find(item, tree)
+
+
+def test_insert_hand_written_example_8():
+    tree = Node(
+        key=None,
+        value=Sentinel.MISSING,
+        children=[],
+    )
+    items = ["2", "21363", "21"]
+    inserted = []
+    for index, item in enumerate(items):
+        insert(item, index, tree)
+        inserted.append([index, item])
+        for inserted_index, inserted_item in inserted:
+            pass
+            # assert inserted_index == find(inserted_item, tree)
+    find("21363", tree)
+    # for index, item in enumerate(items):
+    #     assert index == find(item, tree)
 
 
 @given(st.sets(st.text(min_size=1, max_size=20480), min_size=1, max_size=20480))

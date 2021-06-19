@@ -1,33 +1,50 @@
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from itertools import zip_longest
 from typing import List, Tuple, TypeVar
 
-from pyradixtree.node import Node, Sentinel
+from pyradixtree.node import Node, Sentinel, pretty_path
 from pyradixtree.operations._find import _compare_find
 
 T = TypeVar("T")
 
 
-def _compare_insert(search: str, prefix: str) -> Tuple[str, str, str]:
+@dataclass
+class ComparisonResult:
+    common: str
+    right_dangling: str
+    left_dangling: str
+
+
+def _compare_insert(search: str, prefix: str) -> ComparisonResult:
     """
     Helper function for insert used to find common prefix and dangling
     end.
+
+    :param search: string to search
+    :param prefix: prefix to look for
+    :return: an instance of ComparisonResult, the common is the shared
+        start of the string e.g. between 'abc' and 'abba' this is 'ab'
     """
+    # TODO rewrite using string methods
     common: List[str] = []
-    acc_left: List[str] = []
-    acc_right: List[str] = []
+    acc_r: List[str] = []
+    acc_l: List[str] = []
     for (s, p) in zip_longest(search, prefix):
         if s is None:
             # search is shorter than prefix
-            acc_left.append(p)
+            acc_r.append(p)
         elif p is None:
             # search is longer than prefix, but contains prefix
-            acc_right.append(s)
+            acc_l.append(s)
         elif s == p:
             common.append(s)
         else:
             break
-    return "".join(common), "".join(acc_left), "".join(acc_right)
+    return ComparisonResult(
+        common="".join(common),
+        right_dangling="".join(acc_r),
+        left_dangling="".join(acc_l),
+    )
 
 
 def _insert_root(key: str, value: T, path: List[Node[T]]) -> None:
@@ -63,7 +80,7 @@ def _insert_root_split(key: str, common: str, value: T, path: List[Node[T]]) -> 
     """
     For example if the tree already contains 'tester' to add 'test', we
     take their common prefix 'test' and add in 'test' -> 'er'. Also if the tree already
-    contains 'test', to insert 'team', we take their common prefix 'te' and then split ]
+    contains 'test', to insert 'team', we take their common prefix 'te' and then split
     'te' -> 'st' and 'te' -> 'am'. Also if the tree already contains 'test' and 'team',
     to insert 'toast' we split at their common prefix 't', into 't' -> 'e' and
     't' -> 'oast', then connect 't' -> 'e' -> 'st' and 't' -> 'e' -> 'am'.
@@ -107,41 +124,48 @@ def insert(key: str, value: T, tree: Node[T], update: bool = True) -> None:
     :param update: whether to update the value if found
     """
     if len(key) == 0:
-        # TODO this is a bit of a limitation
+        # TODO this is a bit of a limitation; can be worked around
         raise ValueError("Cannot insert empty strings")
     path: List[Node[T]] = []
+    path_key: str = ""
     acc: List[Tuple[Node[T], str]] = [(tree, key)]
     while acc:
         item, search = acc.pop()
         if item.is_root:
+            # the top of the tree, add the item to the path and
+            # add all of its children to explore
             path.append(item)
             acc.extend((node, search) for node in item.children)
         else:
+            # a comparison return value of None indicates either:
+            # (i) item.key is None or
+            # (ii) search does not start with item.key
             comparison = _compare_find(search, item.key)
             if comparison is None and item.key is not None:
-                common, left, right = _compare_insert(search, item.key)
-                if common:
+                result = _compare_insert(search, item.key)
+                if result.common:
                     path.append(item)
-                    _insert_root_split(search, common, value, path)
+                    path_key += item.key
+                    _insert_root_split(search, result.common, value, path)
                     break
                 else:
                     continue
             elif comparison == "" and item.value != Sentinel.MISSING:
-                # found the item, modify it
+                # found the exact item
                 if update:
                     item.value = value
                 break
             elif comparison is not None:
                 # found a prefix, focus search
                 path.append(item)
+                path_key += item.key
                 acc = [(node, comparison) for node in item.children]
             else:
                 # above is to satisfy mypy
                 continue
     else:
-        if path[-1].key is None:
-            # special case of inserting at the root
-            right = key
-        else:
-            _, _, right = _compare_insert(key, path[-1].key)
-        _insert_root(right, value, path)
+        if path[-1].key == "":
+            key = _compare_insert(key, path_key).left_dangling
+        elif path[-1].key is not None:
+            key = _compare_insert(key, path_key).left_dangling
+        _insert_root(key, value, path)

@@ -1,8 +1,11 @@
 import pytest
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
-from pyradixtree.node import Node, Sentinel
-from pyradixtree.operations import find
+from pyradixtree.node import Node, Sentinel, pretty_path
+from pyradixtree.operations import find, length
 from pyradixtree.operations._insert import (
+    ComparisonResult,
     _compare_insert,
     _insert_root,
     _insert_root_split,
@@ -11,8 +14,12 @@ from pyradixtree.operations._insert import (
 
 
 def test_compare_insert():
-    assert _compare_insert("abba", "ab") == ("ab", "", "ba")
-    assert _compare_insert("ab", "abba") == ("ab", "ba", "")
+    assert _compare_insert("abba", "ab") == ComparisonResult(
+        common="ab", right_dangling="", left_dangling="ba"
+    )
+    assert _compare_insert("ab", "abba") == ComparisonResult(
+        common="ab", right_dangling="ba", left_dangling=""
+    )
 
 
 def test_insert_root_hand_written_example_1():
@@ -77,6 +84,7 @@ def test_insert_root_hand_written_example_2():
     assert len(tree.children[1].children) == 2
     assert tree.children[1].children[0].key == "er"
     assert find("slower", tree)[0] == 4
+    assert find("slow", tree)[0] == 2
 
 
 def test_insert_root_split_hand_written_example_1():
@@ -296,3 +304,101 @@ def test_insert_hand_written_example_5():
         _ = find("roast", tree)[0]
     insert("roast", 3, tree)
     assert find("roast", tree)[0] == 3
+
+
+def test_insert_hand_written_example_6():
+    tree = Node(
+        key=None,
+        value=Sentinel.MISSING,
+        children=[],
+    )
+    items = ["1", "102", "114"]
+    inserted = []
+    for index, item in enumerate(items):
+        insert(item, index, tree)
+        inserted.append([index, item])
+        for inserted_index, inserted_item in inserted:
+            assert inserted_index == find(inserted_item, tree)[0]
+    for index, item in enumerate(items):
+        assert index == find(item, tree)[0]
+
+
+def test_insert_hand_written_example_7():
+    tree = Node(
+        key=None,
+        value=Sentinel.MISSING,
+        children=[],
+    )
+    items = ["-110000000", "-100", "-4", "-12"]
+    inserted = []
+    for index, item in enumerate(items):
+        insert(item, index, tree)
+        inserted.append([index, item])
+        for inserted_index, inserted_item in inserted:
+            assert inserted_index == find(inserted_item, tree)[0]
+    for index, item in enumerate(items):
+        assert index == find(item, tree)[0]
+
+
+@given(st.sets(st.text(min_size=1, max_size=20480), min_size=1, max_size=20480))
+@settings(deadline=None)
+def test_insert_random_example_text(items):
+    # insert random texts, check that they exist in the tree
+    # totally random texts are unlikely to hit issues with branching
+    items = list(items)
+    tree = Node(
+        key=None,
+        value=Sentinel.MISSING,
+        children=[],
+    )
+    for item in items:
+        with pytest.raises(KeyError):
+            _ = find(item, tree)[0]
+    for index, item in enumerate(items):
+        insert(item, index, tree)
+    for index, item in enumerate(items):
+        recovered_index = find(item, tree)[0]
+        assert index == recovered_index
+    assert length(tree) == len(items)
+
+
+@given(st.sets(st.integers(), min_size=1, max_size=20480))
+@settings(deadline=None)
+def test_insert_random_example_integers(items):
+    # insert random strings of integers, check that they exist in the tree
+    # totally random texts are unlikely to hit issues with branching
+    items = [str(item) for item in items]
+    tree = Node(
+        key=None,
+        value=Sentinel.MISSING,
+        children=[],
+    )
+    for item in items:
+        with pytest.raises(KeyError):
+            _ = find(item, tree)[0]
+    for index, item in enumerate(items):
+        insert(item, index, tree)
+    for index, item in enumerate(items):
+        recovered_index = find(item, tree)[0]
+        assert index == recovered_index
+    assert length(tree) == len(items)
+
+
+@given(st.integers(min_value=1, max_value=1024))
+@settings(deadline=None)
+def test_insert_random_example_integers_dense(number):
+    items = [str(item) for item in range(number)]
+    tree = Node(
+        key=None,
+        value=Sentinel.MISSING,
+        children=[],
+    )
+    for item in items:
+        with pytest.raises(KeyError):
+            _ = find(item, tree)[0]
+    for index, item in enumerate(items):
+        insert(item, index, tree)
+    for index, item in enumerate(items):
+        recovered_index = find(item, tree)[0]
+        assert index == recovered_index
+    assert length(tree) == len(items)

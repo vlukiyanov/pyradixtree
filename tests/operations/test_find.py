@@ -83,3 +83,34 @@ def test_find_simple_example_2():
     assert len(find("abba", tree, return_path=False)[1]) == 0
     assert len(find("abc", tree, return_path=False)[1]) == 0
     assert len(find("abcd", tree, return_path=False)[1]) == 0
+
+
+def test_find_example_3():
+    """
+    This tests searching in a more complex example with a key that has been moved down
+    after numerous splittings.
+    """
+    tree = Node(
+        key=None,
+        value=Sentinel.MISSING,
+        children=[
+            Node(
+                key="1",
+                children=[
+                    Node(key="02", children=[], value=4),
+                    Node(
+                        key="",
+                        children=[
+                            Node(key="14", children=[], value=5),
+                            Node(key="", children=[], value=0),
+                        ],
+                        value=Sentinel.MISSING,
+                    ),
+                ],
+                value=Sentinel.MISSING,
+            )
+        ],
+    )
+    assert find("102", tree)[0] == 4
+    assert find("114", tree)[0] == 5
+    assert find("1", tree)[0] == 0

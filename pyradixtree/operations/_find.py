@@ -46,7 +46,7 @@ def find(key: str, tree: Node[T], return_path: bool = True) -> Tuple[T, List[Nod
             if comparison is None:
                 # item not found, continue looking through acc
                 continue
-            elif comparison == "" and item.value != Sentinel.MISSING:
+            elif comparison == "" and item.is_leaf:
                 # found the exact item, return it
                 if return_path:
                     path.append(item)
@@ -54,9 +54,10 @@ def find(key: str, tree: Node[T], return_path: bool = True) -> Tuple[T, List[Nod
             else:
                 # found a prefix, focus search
                 if item.key == "":
-                    continue
-                if return_path:
-                    path.append(item)
-                acc = [(node, comparison) for node in item.children]
+                    acc.extend((node, comparison) for node in item.children)
+                else:
+                    acc = [(node, comparison) for node in item.children]
+                    if return_path:
+                        path.append(item)
     # if we exhaust search without finding a prefix or the exact item, we end up here
     raise KeyError()

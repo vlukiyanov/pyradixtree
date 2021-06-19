@@ -45,10 +45,10 @@ def test_insert_root_hand_written_example_1():
     path = [tree]  # root
     assert len(tree.children) == 2
     with pytest.raises(KeyError):
-        _ = find("water", tree)[0] is None
+        _ = find("water", tree) is None
     _insert_root("water", 3, path)
     assert len(tree.children) == 3
-    assert find("water", tree)[0] == 3
+    assert find("water", tree) == 3
 
 
 def test_insert_root_hand_written_example_2():
@@ -79,12 +79,12 @@ def test_insert_root_hand_written_example_2():
     path = [tree, tree.children[1]]  # root -> 'slow'
     assert not tree.children[1].children
     with pytest.raises(KeyError):
-        _ = find("slower", tree)[0]
+        _ = find("slower", tree)
     _insert_root("er", 4, path)
     assert len(tree.children[1].children) == 2
     assert tree.children[1].children[0].key == "er"
-    assert find("slower", tree)[0] == 4
-    assert find("slow", tree)[0] == 2
+    assert find("slower", tree) == 4
+    assert find("slow", tree) == 2
 
 
 def test_insert_root_split_hand_written_example_1():
@@ -105,12 +105,12 @@ def test_insert_root_split_hand_written_example_1():
     path = [tree, tree.children[0]]  # root -> 'tester'
     assert len(tree.children) == 1
     with pytest.raises(KeyError):
-        _ = find("test", tree)[0]
-    assert find("tester", tree)[0] == 1
+        _ = find("test", tree)
+    assert find("tester", tree) == 1
     _insert_root_split("test", "test", 2, path)
     assert len(tree.children) == 1
-    assert find("test", tree)[0] == 2
-    assert find("tester", tree)[0] == 1
+    assert find("test", tree) == 2
+    assert find("tester", tree) == 1
 
 
 def test_insert_root_split_hand_written_example_2():
@@ -131,12 +131,12 @@ def test_insert_root_split_hand_written_example_2():
     path = [tree, tree.children[0]]  # root -> 'test'
     assert len(tree.children) == 1
     with pytest.raises(KeyError):
-        _ = find("team", tree)[0]
-    assert find("test", tree)[0] == 1
+        _ = find("team", tree)
+    assert find("test", tree) == 1
     _insert_root_split("team", "te", 2, path)
     assert len(tree.children) == 1
-    assert find("team", tree)[0] == 2
-    assert find("test", tree)[0] == 1
+    assert find("team", tree) == 2
+    assert find("test", tree) == 1
 
 
 def test_insert_root_split_hand_written_example_3():
@@ -167,15 +167,15 @@ def test_insert_root_split_hand_written_example_3():
     )
     path = [tree, tree.children[0]]  # root -> 'te'
     assert len(tree.children) == 1
-    assert find("test", tree)[0] == 1
-    assert find("team", tree)[0] == 2
+    assert find("test", tree) == 1
+    assert find("team", tree) == 2
     with pytest.raises(KeyError):
-        _ = find("toast", tree)[0]
+        _ = find("toast", tree)
     _insert_root_split("toast", "t", 3, path)
     assert len(tree.children) == 1
-    assert find("test", tree)[0] == 1
-    assert find("team", tree)[0] == 2
-    assert find("toast", tree)[0] == 3
+    assert find("test", tree) == 1
+    assert find("team", tree) == 2
+    assert find("toast", tree) == 3
 
 
 def test_insert_hand_written_example_1():
@@ -204,9 +204,9 @@ def test_insert_hand_written_example_1():
         ],
     )
     with pytest.raises(KeyError):
-        _ = find("slower", tree)[0]
+        _ = find("slower", tree)
     insert("slower", 4, tree)
-    assert find("slower", tree)[0] == 4
+    assert find("slower", tree) == 4
 
 
 def test_insert_hand_written_example_2():
@@ -225,9 +225,9 @@ def test_insert_hand_written_example_2():
         ],
     )
     with pytest.raises(KeyError):
-        _ = find("team", tree)[0]
+        _ = find("team", tree)
     insert("team", 2, tree)
-    assert find("team", tree)[0] == 2
+    assert find("team", tree) == 2
 
 
 def test_insert_hand_written_example_3():
@@ -246,9 +246,9 @@ def test_insert_hand_written_example_3():
         ],
     )
     with pytest.raises(KeyError):
-        _ = find("team", tree)[0]
+        _ = find("team", tree)
     insert("team", 2, tree)
-    assert find("team", tree)[0] == 2
+    assert find("team", tree) == 2
 
 
 def test_insert_hand_written_example_4():
@@ -279,16 +279,16 @@ def test_insert_hand_written_example_4():
         ],
     )
     with pytest.raises(KeyError):
-        _ = find("toast", tree)[0]
+        _ = find("toast", tree)
     insert("toast", 3, tree)
-    assert find("toast", tree)[0] == 3
+    assert find("toast", tree) == 3
     # test update functionality
     insert("toast", 4, tree, update=False)
-    assert find("toast", tree)[0] == 3
+    assert find("toast", tree) == 3
     insert("toast", 4, tree, update=True)
-    assert find("toast", tree)[0] == 4
+    assert find("toast", tree) == 4
     insert("toast", 5, tree, update=True)
-    assert find("toast", tree)[0] == 5
+    assert find("toast", tree) == 5
 
 
 def test_insert_hand_written_example_5():
@@ -301,9 +301,9 @@ def test_insert_hand_written_example_5():
         children=[],
     )
     with pytest.raises(KeyError):
-        _ = find("roast", tree)[0]
+        _ = find("roast", tree)
     insert("roast", 3, tree)
-    assert find("roast", tree)[0] == 3
+    assert find("roast", tree) == 3
 
 
 def test_insert_hand_written_example_6():
@@ -318,9 +318,9 @@ def test_insert_hand_written_example_6():
         insert(item, index, tree)
         inserted.append([index, item])
         for inserted_index, inserted_item in inserted:
-            assert inserted_index == find(inserted_item, tree)[0]
+            assert inserted_index == find(inserted_item, tree)
     for index, item in enumerate(items):
-        assert index == find(item, tree)[0]
+        assert index == find(item, tree)
 
 
 def test_insert_hand_written_example_7():
@@ -335,9 +335,9 @@ def test_insert_hand_written_example_7():
         insert(item, index, tree)
         inserted.append([index, item])
         for inserted_index, inserted_item in inserted:
-            assert inserted_index == find(inserted_item, tree)[0]
+            assert inserted_index == find(inserted_item, tree)
     for index, item in enumerate(items):
-        assert index == find(item, tree)[0]
+        assert index == find(item, tree)
 
 
 @given(st.sets(st.text(min_size=1, max_size=20480), min_size=1, max_size=20480))
@@ -353,11 +353,11 @@ def test_insert_random_example_text(items):
     )
     for item in items:
         with pytest.raises(KeyError):
-            _ = find(item, tree)[0]
+            _ = find(item, tree)
     for index, item in enumerate(items):
         insert(item, index, tree)
     for index, item in enumerate(items):
-        recovered_index = find(item, tree)[0]
+        recovered_index = find(item, tree)
         assert index == recovered_index
     assert length(tree) == len(items)
 
@@ -375,11 +375,11 @@ def test_insert_random_example_integers(items):
     )
     for item in items:
         with pytest.raises(KeyError):
-            _ = find(item, tree)[0]
+            _ = find(item, tree)
     for index, item in enumerate(items):
         insert(item, index, tree)
     for index, item in enumerate(items):
-        recovered_index = find(item, tree)[0]
+        recovered_index = find(item, tree)
         assert index == recovered_index
     assert length(tree) == len(items)
 
@@ -395,10 +395,10 @@ def test_insert_random_example_integers_dense(number):
     )
     for item in items:
         with pytest.raises(KeyError):
-            _ = find(item, tree)[0]
+            _ = find(item, tree)
     for index, item in enumerate(items):
         insert(item, index, tree)
     for index, item in enumerate(items):
-        recovered_index = find(item, tree)[0]
+        recovered_index = find(item, tree)
         assert index == recovered_index
     assert length(tree) == len(items)

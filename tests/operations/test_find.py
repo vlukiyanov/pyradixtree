@@ -39,8 +39,8 @@ def test_find_simple_example_1():
         ],
         value=Sentinel.MISSING,
     )
-    assert find("tester", tree)[0] == 1
-    assert find("test", tree)[0] == 2
+    assert find("tester", tree) == 1
+    assert find("test", tree) == 2
 
 
 def test_find_simple_example_2():
@@ -66,23 +66,15 @@ def test_find_simple_example_2():
         ],
     )
     # values
-    assert find("abba", tree)[0] == "squirrel"
+    assert find("abba", tree) == "squirrel"
     with pytest.raises(KeyError):
-        _ = find("abb", tree)[0]
+        _ = find("abb", tree)
     with pytest.raises(KeyError):
-        _ = find("bba", tree)[0] is None
-    assert find("abc", tree)[0] == "three"
-    assert find("abcd", tree)[0] == "four"
+        _ = find("bba", tree) is None
+    assert find("abc", tree) == "three"
+    assert find("abcd", tree) == "four"
     with pytest.raises(KeyError):
-        assert find("ab", tree)[0] is None
-    # paths
-    assert len(find("abba", tree)[1]) == 3
-    assert len(find("abc", tree)[1]) == 4
-    assert len(find("abcd", tree)[1]) == 4
-    # handling of return_path
-    assert len(find("abba", tree, return_path=False)[1]) == 0
-    assert len(find("abc", tree, return_path=False)[1]) == 0
-    assert len(find("abcd", tree, return_path=False)[1]) == 0
+        assert find("ab", tree) is None
 
 
 def test_find_example_3():
@@ -111,6 +103,6 @@ def test_find_example_3():
             )
         ],
     )
-    assert find("102", tree)[0] == 4
-    assert find("114", tree)[0] == 5
-    assert find("1", tree)[0] == 0
+    assert find("102", tree) == 4
+    assert find("114", tree) == 5
+    assert find("1", tree) == 0

@@ -23,23 +23,18 @@ def _compare_find(search: str, prefix: Optional[str]) -> Optional[str]:
         return None
 
 
-def find(key: str, tree: Node[T], return_path: bool = True) -> Tuple[T, List[Node[T]]]:
+def find(key: str, tree: Node[T]) -> Tuple[T, List[Node[T]]]:
     """
-    Find and return the value and path to a given
+    Find and return the value
 
     :param key: given key to search for
     :param tree: given radix tree to search
-    :param return_path: whether to return path, default True
-    :return: tuple of value and path if found, otherwise KeyError is raised; if the
-        return_path is set to False then the returned path is always empty
+    :return: value
     """
-    path: List[Node[T]] = []
     acc: List[Tuple[Node[T], str]] = [(tree, key)]
     while acc:
         item, search = acc.pop()
         if item.is_root:
-            if return_path:
-                path.append(item)
             acc.extend((node, search) for node in item.children)
         else:
             comparison = _compare_find(search, item.key)
@@ -48,16 +43,12 @@ def find(key: str, tree: Node[T], return_path: bool = True) -> Tuple[T, List[Nod
                 continue
             elif comparison == "" and item.is_leaf:
                 # found the exact item, return it
-                if return_path:
-                    path.append(item)
-                return item.get(), path
+                return item.get()
             else:
                 # found a prefix, focus search
                 if item.key == "":
                     acc.extend((node, comparison) for node in item.children)
                 else:
                     acc = [(node, comparison) for node in item.children]
-                    if return_path:
-                        path.append(item)
     # if we exhaust search without finding a prefix or the exact item, we end up here
     raise KeyError()

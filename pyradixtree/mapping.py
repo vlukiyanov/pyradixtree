@@ -17,7 +17,7 @@ class RadixTreeMap(MutableMapping[str, VT]):
         delete(v, self._root)
 
     def __getitem__(self, k: str) -> VT:
-        return find(k, self._root, return_path=False)[0]
+        return find(k, self._root)
 
     def __len__(self) -> int:
         return length(self._root)
@@ -29,7 +29,7 @@ class RadixTreeMap(MutableMapping[str, VT]):
             for child in item[-1].children:
                 acc.append(item + (child,))  # type: ignore
             if item[-1].value is not Sentinel.MISSING:
-                yield item.key  # type: ignore
+                yield "".join(i.key for i in item if i.key is not None)  # type: ignore
 
     def __repr__(self):
         return repr(dict(self.items()))

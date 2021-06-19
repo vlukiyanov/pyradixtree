@@ -14,18 +14,17 @@ def delete(key: str, tree: Node[T]) -> Optional[str]:
     :param key: given key to remove
     :param tree: given radix tree
     """
-    path: List[Node[T]] = []
-    acc: List[Tuple[Node[T], str]] = [(tree, key)]
+    acc: List[Tuple[Node[T], str, List[Node[T]]]] = [(tree, key, [])]
     while acc:
-        item, search = acc.pop()
+        item, search, path = acc.pop()
         if item.is_root:
-            path.append(item)
-            acc.extend((node, search) for node in item.children)
+            acc.extend((node, search, path + [item]) for node in item.children)
         else:
             comparison = _compare_find(search, item.key)
             if comparison is None:
+                # item not found, continue looking through acc
                 continue
-            elif comparison == "" and item.value != Sentinel.MISSING:
+            elif comparison == "" and item.is_leaf:
                 # found the item, modify it
                 current_root = path[-1]
                 current_root.children.remove(item)
@@ -37,6 +36,10 @@ def delete(key: str, tree: Node[T]) -> Optional[str]:
                 return key
             else:
                 # found a prefix, focus search
-                path.append(item)
-                acc = [(node, comparison) for node in item.children]
+                if item.key == "":
+                    acc.extend(
+                        (node, comparison, path + [item]) for node in item.children
+                    )
+                else:
+                    acc = [(node, comparison, path + [item]) for node in item.children]
     return None

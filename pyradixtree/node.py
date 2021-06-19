@@ -1,6 +1,6 @@
 import dataclasses
 import enum
-from typing import Generic, MutableSequence, Optional, TypeVar, Union
+from typing import Generic, List, MutableSequence, Optional, TypeVar, Union
 
 T = TypeVar("T")
 
@@ -28,3 +28,15 @@ class Node(Generic[T]):
             raise KeyError()
         else:
             return self.value  # type: ignore
+
+
+def pretty_path(l: List[Node[T]]) -> str:
+    acc: List[str] = []
+    for item in l:
+        if item.key is None:
+            acc.append("{Root}")
+        else:
+            acc.append(item.key)
+        if not item.is_leaf:
+            acc.append(" -> ")
+    return "".join(acc)

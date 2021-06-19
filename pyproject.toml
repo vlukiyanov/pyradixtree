@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "pyradixtree"
+version = "0.1.0"
+description = ""
+authors = ["Vladimir Lukiyanov"]
+
+[tool.poetry.dependencies]
+python = ">=3.6.2,<4.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2"
+black = "^21.5b2"
+isort = "^5.8.0"
+flake8 = "^3.9.2"
+mypy = "^0.812"
+hypothesis = "^6.13.14"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3

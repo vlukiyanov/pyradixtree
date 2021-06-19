@@ -2,7 +2,7 @@ import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
-from pyradixtree.node import Node, Sentinel, pretty_path
+from pyradixtree.node import Node, Sentinel
 from pyradixtree.operations import find, length
 from pyradixtree.operations._insert import (
     ComparisonResult,

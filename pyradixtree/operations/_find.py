@@ -1,4 +1,3 @@
-from itertools import zip_longest
 from typing import List, Optional, Tuple, TypeVar
 
 from pyradixtree.node import Node, Sentinel
@@ -10,22 +9,18 @@ def _compare_find(search: str, prefix: Optional[str]) -> Optional[str]:
     """
     Helper function for find, checks whether the prefix should be explored
     for further search.
+
+    :param search: string to search
+    :param prefix: prefix to look for, either a string or None, if None
+        the function returns None
+    :return: None if prefix is None, otherwise the shared part of the prefix
     """
-    acc: List[str] = []
     if prefix is None:
         return None
-    for (s, p) in zip_longest(search, prefix):
-        if s is None:
-            # search is shorter than prefix
-            return None
-        elif p is None:
-            # search is longer than prefix, but contains prefix
-            acc.append(s)
-        elif s == p:
-            continue
-        else:
-            return None
-    return "".join(acc)
+    if search.startswith(prefix):
+        return search[len(prefix) :]
+    else:
+        return None
 
 
 def find(key: str, tree: Node[T], return_path: bool = True) -> Tuple[T, List[Node[T]]]:

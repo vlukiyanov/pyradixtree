@@ -1,4 +1,5 @@
 import pytest
+from hypothesis.strategies import SearchStrategy
 
 from pyradixtree.node import Node, Sentinel
 from pyradixtree.operations._find import _compare_find, find
@@ -23,7 +24,26 @@ def test_compare_find_simple_match():
     assert _compare_find("", "") == ""
 
 
-def test_find_hand_written_examples():
+def test_find_simple_example_1():
+    tree = Node(
+        key=None,
+        children=[
+            Node(
+                key="test",
+                children=[
+                    Node(key="er", children=[], value=1),
+                    Node(key="", children=[], value=2),
+                ],
+                value=Sentinel.MISSING,
+            )
+        ],
+        value=Sentinel.MISSING,
+    )
+    assert find("tester", tree)[0] == 1
+    assert find("test", tree)[0] == 2
+
+
+def test_find_simple_example_2():
     tree = Node(
         key=None,
         value=Sentinel.MISSING,
@@ -63,21 +83,3 @@ def test_find_hand_written_examples():
     assert len(find("abba", tree, return_path=False)[1]) == 0
     assert len(find("abc", tree, return_path=False)[1]) == 0
     assert len(find("abcd", tree, return_path=False)[1]) == 0
-
-
-def test_find_split_example():
-    tree = Node(
-        key=None,
-        children=[
-            Node(
-                key="test",
-                children=[
-                    Node(key="er", children=[], value=1),
-                    Node(key="", children=[], value=2),
-                ],
-                value=Sentinel.MISSING,
-            )
-        ],
-        value=Sentinel.MISSING,
-    )
-    assert find("tester", tree)[0] == 1

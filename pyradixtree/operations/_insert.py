@@ -2,7 +2,7 @@ from dataclasses import dataclass, replace
 from itertools import zip_longest
 from typing import List, Tuple, TypeVar
 
-from pyradixtree.node import Node, Sentinel, pretty_path
+from pyradixtree.node import Node, Sentinel
 from pyradixtree.operations._find import _compare_find
 
 T = TypeVar("T")

@@ -5,14 +5,14 @@ description = ""
 authors = ["Vladimir Lukiyanov"]
 
 [tool.poetry.dependencies]
-python = ">=3.6.2,<4.0"
+python = ">=3.7,<4.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
 black = "^21.5b2"
 isort = "^5.8.0"
 flake8 = "^3.9.2"
-mypy = "^0.812"
+mypy = "^0.931"
 hypothesis = "^6.13.14"
 
 [build-system]

@@ -1,4 +1,4 @@
-from typing import Iterator, List, MutableMapping, Tuple, TypeVar
+from typing import Iterator, List, MutableMapping, Optional, Tuple, TypeVar
 
 from pyradixtree.node import Node, Sentinel
 from pyradixtree.operations import delete, find, insert, length
@@ -7,8 +7,16 @@ VT = TypeVar("VT")
 
 
 class RadixTreeMap(MutableMapping[str, VT]):
-    def __init__(self):
-        self._root: Node[VT] = Node(key=None, value=Sentinel.MISSING, children=[])
+    """
+    This is the mapping interface into the radix tree, supporting setting, deleting, getting and iterating
+    items in a map where the key type is str and the value type is VT, without any bounds.
+    """
+
+    def __init__(self, root: Optional[Node[VT]] = None) -> None:
+        if root is None:
+            self._root: Node[VT] = Node(key=None, value=Sentinel.MISSING, children=[])
+        else:
+            self._root = root
 
     def __setitem__(self, k: str, v: VT) -> None:
         insert(k, v, self._root)

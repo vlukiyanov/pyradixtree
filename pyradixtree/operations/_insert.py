@@ -17,15 +17,14 @@ class ComparisonResult:
 
 def _compare_insert(search: str, prefix: str) -> ComparisonResult:
     """
-    Helper function for insert used to find common prefix and dangling
+    Helper function for insert function, used to find common prefix and dangling
     end.
 
-    :param search: string to search
+    :param search: string to searchpruning
     :param prefix: prefix to look for
     :return: an instance of ComparisonResult, the common is the shared
         start of the string e.g. between 'abc' and 'abba' this is 'ab'
     """
-    # TODO rewrite using string methods
     common: List[str] = []
     acc_r: List[str] = []
     acc_l: List[str] = []
@@ -124,7 +123,6 @@ def insert(key: str, value: T, tree: Node[T], update: bool = True) -> None:
     :param update: whether to update the value if found
     """
     if len(key) == 0:
-        # TODO this is a bit of a limitation; can be worked around
         raise ValueError("Cannot insert empty strings")
     path: List[Node[T]] = []
     path_key: str = ""
@@ -137,9 +135,9 @@ def insert(key: str, value: T, tree: Node[T], update: bool = True) -> None:
             path.append(item)
             acc.extend((node, search) for node in item.children)
         else:
-            # a comparison return value of None indicates either:
-            # (i) item.key is None or
-            # (ii) search does not start with item.key
+            # a comparison return value of None indicates one of:
+            #  (i) item.key is None
+            #  (ii) search does not start with item.key
             comparison = _compare_find(search, item.key)
             if comparison is None and item.key is not None:
                 result = _compare_insert(search, item.key)

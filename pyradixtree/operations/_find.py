@@ -1,6 +1,6 @@
 from typing import List, Optional, Tuple, TypeVar
 
-from pyradixtree.node import Node, Sentinel
+from pyradixtree.node import Node
 
 T = TypeVar("T")
 
@@ -23,9 +23,9 @@ def _compare_find(search: str, prefix: Optional[str]) -> Optional[str]:
         return None
 
 
-def find(key: str, tree: Node[T]) -> T:
+def find_node(key: str, tree: Node[T]) -> Node[T]:
     """
-    Find and return the value
+    Find and return the value of a node in a radix tree, raise KeyError if not found.
 
     :param key: given key to search for
     :param tree: given radix tree to search
@@ -43,8 +43,19 @@ def find(key: str, tree: Node[T]) -> T:
                 continue
             elif comparison == "" and item.is_leaf:
                 # found the exact item, return it
-                return item.get()
+                return item
             else:
                 acc.extend((node, comparison) for node in item.children)
     # if we exhaust search without finding a prefix or the exact item, we end up here
     raise KeyError()
+
+
+def find(key: str, tree: Node[T]) -> T:
+    """
+    Find and return the value of a node in a radix tree, raise KeyError if not found.
+
+    :param key: given key to search for
+    :param tree: given radix tree to search
+    :return: value
+    """
+    return find_node(key, tree).get()

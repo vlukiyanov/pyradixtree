@@ -1,6 +1,6 @@
 import dataclasses
 import enum
-from typing import Generic, List, MutableSequence, Optional, TypeVar, Union
+from typing import Generic, MutableSequence, Optional, TypeVar, Union
 
 T = TypeVar("T")
 

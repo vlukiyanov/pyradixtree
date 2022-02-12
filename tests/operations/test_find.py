@@ -1,5 +1,4 @@
 import pytest
-from hypothesis.strategies import SearchStrategy
 
 from pyradixtree.node import Node, Sentinel
 from pyradixtree.operations._find import _compare_find, find

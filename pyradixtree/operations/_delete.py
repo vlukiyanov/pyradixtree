@@ -1,6 +1,6 @@
 from typing import List, Optional, Tuple, TypeVar
 
-from pyradixtree.node import Node, Sentinel
+from pyradixtree.node import Node
 from pyradixtree.operations._find import _compare_find
 
 T = TypeVar("T")

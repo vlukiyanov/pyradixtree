@@ -7,6 +7,11 @@ VT = TypeVar("VT")
 
 
 class RadixTreeMap(MutableMapping[str, VT]):
+    """
+    This is the mapping interface into the radix tree, supporting setting, deleting, getting and iterating
+    items in a map where the key type is str and the value type is VT, without any bounds.
+    """
+
     def __init__(self, root: Optional[Node[VT]] = None) -> None:
         if root is None:
             self._root: Node[VT] = Node(key=None, value=Sentinel.MISSING, children=[])

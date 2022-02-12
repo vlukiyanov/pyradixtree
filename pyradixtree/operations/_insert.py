@@ -20,7 +20,7 @@ def _compare_insert(search: str, prefix: str) -> ComparisonResult:
     Helper function for insert function, used to find common prefix and dangling
     end.
 
-    :param search: string to search
+    :param search: string to searchpruning
     :param prefix: prefix to look for
     :return: an instance of ComparisonResult, the common is the shared
         start of the string e.g. between 'abc' and 'abba' this is 'ab'

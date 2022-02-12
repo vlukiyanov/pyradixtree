@@ -1,5 +1,3 @@
-import pytest
-
 from pyradixtree.node import Node, Sentinel
 from pyradixtree.operations import delete, insert
 from pyradixtree.operations._length import length
